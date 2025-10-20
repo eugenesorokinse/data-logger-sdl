@@ -10,9 +10,11 @@
 #include "text_resources.h"
 #include "basic.h"
 
-static main_window_data_t *win_handle;
+// ----------------------------------------------------------------------------
 
 _Atomic (size_t) stop_flag;
+
+// ----------------------------------------------------------------------------
 
 static const SDL_Color CH_COL[] =
 {
@@ -36,6 +38,8 @@ static const char *channels_captions[] =
   CHANNEL5_CAPTION,
   CHANNEL6_CAPTION
 };
+
+// ----------------------------------------------------------------------------
 
 static SDL_Color colour_graph_background = MAIN_WINDOW_CHANNEL_BG;
 static SDL_Color colour_graph_frame = MAIN_WINDOW_CHANNEL_FRAME;
@@ -225,6 +229,7 @@ void main_cleanup(main_window_data_t *win_p)
 
 
 // #TODO review closing conditions in case of errors
+// SDL cleaned up in main_cleanup() call in main()
 
 int main_create(main_window_data_t *win_p)
 {
@@ -238,8 +243,6 @@ int main_create(main_window_data_t *win_p)
     {
       break;
     }
-
-    win_handle = win_p;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_EVENTS) != 0)
     {
@@ -325,7 +328,7 @@ int main_create(main_window_data_t *win_p)
     SDL_GetWindowSize(win_p->window_p, &w, &h);
 
     // #TODO Replace number with meaningful defs,
-    // actually that are coords, but ordnung muss sein
+    // actually these are coords, but ordnung muss sein
     for (int i = 0; i < 4; i++)
     {
       channel_init(&win_p->channels_data[i], channels_captions[i], 8,

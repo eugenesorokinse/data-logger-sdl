@@ -137,14 +137,16 @@ serial_thread(void *ctx_p)
               {
                 union
                 {
-                  uint8_t b[4];
-                  float f;
+                  uint8_t b[sizeof(CHANNELS_DATA_TYPE)];
+                  CHANNELS_DATA_TYPE f;
                 } u;
 
-                u.b[0] = frame[4 * k];
-                u.b[1] = frame[4 * k + 1];
-                u.b[2] = frame[4 * k + 2];
-                u.b[3] = frame[4 * k + 3];
+                // reload buffer // We do not have much data,
+                // #TODO Use buffers switching in case of "bigdata"
+                for (int p = 0; p < sizeof(CHANNELS_DATA_TYPE); p++)
+                {
+                  u.b[p] = frame[sizeof(CHANNELS_DATA_TYPE) * k + p];
+                }
 
                 A->data[k] = u.f;
               }

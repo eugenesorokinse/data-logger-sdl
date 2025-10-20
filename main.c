@@ -1,19 +1,22 @@
-// #TODO No volatiles flags, migrate to atomics
+/*
+ *  Serial data plotter / logger
+ *  Platform: linux, SDL2
+ *
+ *  By Eugene Sorokin
+ *
+ */
 
 #include "main.h"
 #include "basic.h"
-
 
 // ----------------------------------------------------------------------------
 
 main_window_data_t main_window =
 {
-//    .running = TRUE,
     .win_w = 1280,
     .win_h = 720,
 
     .color_background = MAIN_WINDOW_COLOUR_BACKGROUND,
-
 };
 
 // ----------------------------------------------------------------------------

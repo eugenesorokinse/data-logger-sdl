@@ -1,0 +1,5 @@
+A simple serial port data  visualize tool.
+Writen for Linux, but may be compiled under Win.
+Uses SDL2, SDL2-ttf
+
+Best regards, ES

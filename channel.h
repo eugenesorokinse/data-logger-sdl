@@ -8,13 +8,15 @@
 #ifndef __MONITORMU_CHANNEL_H__
 #define __MONITORMU_CHANNEL_H__
 
-#include <float.h>
-#include <math.h>
+#  include <float.h>
+#  include <math.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#  include <SDL2/SDL.h>
+#  include <SDL2/SDL_ttf.h>
 
-#include "basic.h"
+#  include "basic.h"
+
+// ----------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------
 
@@ -53,8 +55,12 @@ typedef struct channel_t
 
 void channel_update(channel_t * p, CHANNELS_DATA_TYPE d);
 void channel_draw(channel_t * p, SDL_Renderer *r);
-void channel_init(channel_t *p, const char * caption, int x, int y, int w, int h,
-    SDL_Color cd, SDL_Color cb, SDL_Color cf);
+
+void channel_init(channel_t *p,
+    const char * caption,
+    int x, int y, int w, int h,
+    SDL_Color, SDL_Color, SDL_Color);
+
 void channel_update_area(channel_t *p, int x, int y, int w, int h);
 
 

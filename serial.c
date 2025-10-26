@@ -143,7 +143,7 @@ serial_thread(void *ctx_p)
 
                 // reload buffer // We do not have much data,
                 // #TODO Use buffers switching in case of "bigdata"
-                for (int p = 0; p < sizeof(CHANNELS_DATA_TYPE); p++)
+                for (uint16_t p = 0; p < sizeof(CHANNELS_DATA_TYPE); p++)
                 {
                   u.b[p] = frame[sizeof(CHANNELS_DATA_TYPE) * k + p];
                 }

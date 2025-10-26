@@ -25,12 +25,14 @@
 #  define CHANNELS_OFFSET (0.0f)
 #endif
 
-static inline float chan_to_float(CHANNELS_DATA_TYPE v)
+static inline float
+chan_to_float(CHANNELS_DATA_TYPE v)
 {
   return CHANNELS_TO_FLOAT(v) * CHANNELS_SCALE + CHANNELS_OFFSET;
 }
 
-static void wf_compute_minmax(const CHANNELS_DATA_TYPE *v, size_t n,
+static void
+wf_compute_minmax(const CHANNELS_DATA_TYPE *v, size_t n,
     float *out_min, float *out_max)
 {
   float mn = FLT_MAX, mx = -FLT_MAX;
@@ -59,7 +61,8 @@ static void wf_compute_minmax(const CHANNELS_DATA_TYPE *v, size_t n,
   *out_max = mx;
 }
 
-static inline int wf_map_y(float v, float mn, float mx, int y, int h)
+static inline int
+wf_map_y(float v, float mn, float mx, int y, int h)
 {
   if (mx == mn)
     mx = mn + 1.f;
@@ -71,7 +74,8 @@ static inline int wf_map_y(float v, float mn, float mx, int y, int h)
   return y + (int) lroundf((1.f - t) * (float) (h - 1));
 }
 
-static inline void draw_waveform_channel(SDL_Renderer *ren,
+static inline void
+draw_waveform_channel(SDL_Renderer *ren,
     const CHANNELS_DATA_TYPE *data, size_t n, int x, int y, int w, int h,
     SDL_Color color, int autoscale, float ymin, float ymax)
 {
@@ -167,7 +171,8 @@ static inline void draw_waveform_channel(SDL_Renderer *ren,
 
 // ----------------------------------------------------------------------------
 
-void channel_update(channel_t *p, CHANNELS_DATA_TYPE d)
+void
+channel_update(channel_t *p, CHANNELS_DATA_TYPE d)
 {
   p->data[p->head++] = d;
 
@@ -177,14 +182,18 @@ void channel_update(channel_t *p, CHANNELS_DATA_TYPE d)
 
 // ----------------------------------------------------------------------------
 
-void channel_draw(channel_t *p, SDL_Renderer *r)
+void
+channel_draw(channel_t *p, SDL_Renderer *r)
 {
   draw_waveform_channel(r, p->data, MAX_DATA_BUFFERING, p->x, p->y, p->w, p->h,
       p->colour_data, TRUE, 0, 0);
 
 }
 
-void channel_init(channel_t *p, const char *caption, int x, int y, int w, int h,
+void
+channel_init(channel_t *p,
+    const char *caption,
+    int x, int y, int w, int h,
     SDL_Color cd, SDL_Color cb, SDL_Color cf)
 {
   p->caption = (const char*) caption;
@@ -199,7 +208,10 @@ void channel_init(channel_t *p, const char *caption, int x, int y, int w, int h,
 
 // ----------------------------------------------------------------------------
 
-void channel_update_area(channel_t *p, int x, int y, int w, int h)
+void
+channel_update_area(channel_t *p,
+    int x, int y,
+    int w, int h)
 {
   p->x = x;
   p->y = y;

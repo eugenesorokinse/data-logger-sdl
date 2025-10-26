@@ -8,26 +8,26 @@
 #ifndef __MAINWINDOW_H__
 #define __MAINWINDOW_H__
 
-#include <stdio.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-#include <termios.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdatomic.h>
+#  include <stdio.h>
+#  include <errno.h>
+#  include <fcntl.h>
+#  include <signal.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <stdint.h>
+#  include <string.h>
+#  include <termios.h>
+#  include <time.h>
+#  include <unistd.h>
+#  include <stdatomic.h>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
+#  include <SDL2/SDL.h>
+#  include <SDL2/SDL_ttf.h>
 
-#include "basic.h"
+#  include "basic.h"
 
-#include "serial.h"
-#include "channel.h"
+#  include "serial.h"
+#  include "channel.h"
 
 // ----------------------------------------------------------------------------
 
@@ -48,11 +48,14 @@ typedef struct
 
     channel_t channels_data[MAX_CHANNELS];
 
+    int err;
+
 } main_window_data_t;
 
 // ----------------------------------------------------------------------------
 
-int main_create(main_window_data_t*);
+void main_displayerror(main_window_data_t *, mm_error_t);
+mm_error_t main_create(main_window_data_t*);
 void main_events(main_window_data_t*);
 void main_updatescreen(main_window_data_t*);
 void main_loop(main_window_data_t*);

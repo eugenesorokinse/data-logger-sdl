@@ -12,7 +12,16 @@
 #  define TRUE                          1
 #  define FALSE                         0
 
-#  define MM_OK                         0
+// ----------------------------------------------------------------------------
+
+typedef enum
+{
+  MM_OK = 0,
+  MM_SERIAL_ERROR,
+
+}mm_error_t;
+
+// ----------------------------------------------------------------------------
 
 // channels definitions
 #  define MAX_CHANNELS                  7
@@ -33,5 +42,20 @@
 
 #  define MAIN_WINDOW_CHANNEL_BG        { 20, 20, 20, 255 }
 #  define MAIN_WINDOW_CHANNEL_FRAME     { 40, 40, 40, 255 }
+
+#  define MAIN_WINDOW_ERROR_DELAY       2
+
+// channels areas coords
+#  define CHANNEL_CAPTION_XOFFSET   4
+#  define CHANNEL_CAPTION_YOFFSET   4
+
+#  define CHANNEL_VALUE_XOFFSET     4
+#  define CHANNEL_VALUE_YOFFSET     24
+
+#  define CHANNEL_AREA_XOFFSET      8
+#  define CHANNEL_AREA_YOFFSET      8
+
+#  define CHANNELS_IN_COLUMN        4
+
 
 #endif

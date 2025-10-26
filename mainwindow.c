@@ -5,6 +5,9 @@
  *      Author: es
  */
 
+// #TODO add calibration features
+
+
 #include "mainwindow.h"
 
 #include "text_resources.h"
@@ -29,6 +32,7 @@ static const SDL_Color CH_COL[] =
 };
 
 static const char *mainwindow_caption = MAIN_WINDOW_CAPTION;
+
 static const char *channels_captions[] =
 {
   CHANNEL0_CAPTION,
@@ -42,9 +46,11 @@ static const char *channels_captions[] =
 
 // ----------------------------------------------------------------------------
 
+// Default channels' colours
 static SDL_Color colour_graph_background = MAIN_WINDOW_CHANNEL_BG;
 static SDL_Color colour_graph_frame = MAIN_WINDOW_CHANNEL_FRAME;
 
+// Momentum data to visualize
 static CHANNELS_DATA_TYPE data_momentum[MAX_CHANNELS] = { 0 };
 
 // ----------------------------------------------------------------------------
@@ -60,10 +66,48 @@ static void draw_text(main_window_data_t *win_p, int x, int y, const char *txt,
     return;
 
   SDL_Texture *t = SDL_CreateTextureFromSurface(win_p->render_p, s);
-  SDL_Rect r = { x, y, s->w, s->h };
+  SDL_Rect r =
+  { x, y, s->w, s->h };
   SDL_FreeSurface(s);
   SDL_RenderCopy(win_p->render_p, t, NULL, &r);
   SDL_DestroyTexture(t);
+}
+
+// ----------------------------------------------------------------------------
+
+void main_displayerror(main_window_data_t *win_p, mm_error_t err)
+{
+  SDL_SetRenderDrawColor(win_p->render_p,
+      win_p->color_background.r,
+      win_p->color_background.g,
+      win_p->color_background.b,
+      win_p->color_background.a);
+
+  SDL_RenderClear(win_p->render_p);
+
+  int w, h;
+  SDL_GetWindowSize(win_p->window_p, &w, &h);
+
+  // #TODO Get text width and center text's position
+  switch (err)
+  {
+    case (MM_SERIAL_ERROR):
+    {
+      SDL_Colour colour = { 255, 255, 255, 255 };
+      draw_text(win_p, 200, 100, MSG_ERROR_SERIALPORTOPENNING, colour);
+    }
+      break;
+
+    default:
+    {
+      SDL_Colour colour = { 255, 0, 0, 255 };
+      draw_text(win_p, 200, 100, MSG_ERROR_GENERAL, colour);
+    }
+    break;
+  }
+
+  SDL_RenderPresent(win_p->render_p);
+  sleep(MAIN_WINDOW_ERROR_DELAY);
 }
 
 // ----------------------------------------------------------------------------
@@ -95,15 +139,16 @@ void main_updatescreen(main_window_data_t *win_p)
   {
     channel_draw(&win_p->channels_data[i], win_p->render_p);
 
-    draw_text(win_p, win_p->channels_data[i].x + 4,
-        win_p->channels_data[i].y + 4, win_p->channels_data[i].caption,
-        win_p->channels_data[i].colour_data);
+    draw_text(win_p, win_p->channels_data[i].x + CHANNEL_CAPTION_XOFFSET,
+        win_p->channels_data[i].y + CHANNEL_CAPTION_YOFFSET,
+        win_p->channels_data[i].caption, win_p->channels_data[i].colour_data);
 
-    char buf[16] = { 0 };
+    char buf[16] =
+    { 0 };
     sprintf(buf, "%0.02f", data_momentum[i]);
 
-    draw_text(win_p, win_p->channels_data[i].x + 4,
-        win_p->channels_data[i].y + 16, buf,
+    draw_text(win_p, win_p->channels_data[i].x + CHANNEL_VALUE_XOFFSET,
+        win_p->channels_data[i].y + CHANNEL_VALUE_YOFFSET, buf,
         win_p->channels_data[i].colour_data);
   }
 }
@@ -160,6 +205,7 @@ void main_loop(main_window_data_t *win_p)
 #endif
 
       // Do it faster or another way
+      // #TODO shift to doublebuffering mmmm.... but we have plenty of time
       for (int i = 0; i < MAX_CHANNELS; i++)
       {
         channel_update(&win_p->channels_data[i], win_p->serial.data[i]);
@@ -226,11 +272,10 @@ void main_cleanup(main_window_data_t *win_p)
   SDL_Quit();
 }
 
-
 // #TODO review closing conditions in case of errors
 // SDL cleaned up in main_cleanup() call in main()
 
-int main_create(main_window_data_t *win_p)
+mm_error_t main_create(main_window_data_t *win_p)
 {
   int res = 1;
 
@@ -309,7 +354,8 @@ int main_create(main_window_data_t *win_p)
     int fd = open_serial(&win_p->serial);
     if (fd < 0)
     {
-      fprintf(stderr, "Serial port error\n");
+      fprintf(stderr, MSG_ERROR_SERIALPORTOPENNING "\n");
+      main_displayerror(win_p, MM_SERIAL_ERROR);
       break;
     }
 
@@ -326,18 +372,31 @@ int main_create(main_window_data_t *win_p)
     int w, h;
     SDL_GetWindowSize(win_p->window_p, &w, &h);
 
-    // #TODO Replace number with meaningful defs,
-    // actually these are coords, but ordnung muss sein
-    for (int i = 0; i < 4; i++)
+    // Actually these are coords, but ordnung muss sein
+    // If you have other amount of channels, then place them as you need :)
+    // #TODO Remove excessive code here and in window redraw func.
+
+    for (int i = 0; i < CHANNELS_IN_COLUMN; i++)
     {
-      channel_init(&win_p->channels_data[i], channels_captions[i], 8,
-          8 + i * (8 + h / 4 - 8), w / 2 - 2 * 8, h / 4 - 16, CH_COL[i],
+      channel_init(&win_p->channels_data[i],
+          channels_captions[i],
+          CHANNEL_AREA_XOFFSET,
+          CHANNEL_AREA_YOFFSET + i * (CHANNEL_AREA_YOFFSET + h / CHANNELS_IN_COLUMN - CHANNEL_AREA_YOFFSET),
+          w / 2 - 2 * CHANNEL_AREA_XOFFSET,
+          h / CHANNELS_IN_COLUMN - 2 * CHANNEL_AREA_YOFFSET,
+          CH_COL[i],
           colour_graph_background, colour_graph_frame);
     }
-    for (int i = 0; i < 3; i++)
+
+    // initialize the second column of channels's areas
+    for (int i = 0; i < (CHANNELS_IN_COLUMN - MAX_CHANNELS); i++)
     {
-      channel_init(&win_p->channels_data[i + 4], channels_captions[i + 4],
-          w / 2, 8 + i * (8 + h / 4 - 8), w / 2 - 8, h / 4 - 16, CH_COL[i + 4],
+      channel_init(&win_p->channels_data[i + CHANNELS_IN_COLUMN],
+          channels_captions[i + CHANNELS_IN_COLUMN],
+          w / 2, CHANNEL_AREA_YOFFSET + i * (CHANNEL_AREA_YOFFSET + h / CHANNELS_IN_COLUMN - CHANNEL_AREA_YOFFSET),
+          w / 2 - CHANNEL_AREA_XOFFSET,
+          h / CHANNELS_IN_COLUMN - 2 * CHANNEL_AREA_YOFFSET,
+          CH_COL[i + 4],
           colour_graph_background, colour_graph_frame);
     }
 
@@ -358,9 +417,13 @@ int main_create(main_window_data_t *win_p)
   return res;
 }
 
+// ----------------------------------------------------------------------------
+
 void serial_on_sigint(int s)
 {
   (void) s;
 
   atomic_store(&stop_flag, TRUE);
 }
+
+// ----------------------------------------------------------------------------

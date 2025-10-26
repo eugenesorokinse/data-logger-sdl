@@ -21,11 +21,12 @@ main_window_data_t main_window =
 
 // ----------------------------------------------------------------------------
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
   // some preps
-  main_window.serial.dev_p = (argc > 1) ? argv[1] : "/dev/ttyACM0";
-  main_window.serial.baud = (argc > 2) ? atoi(argv[2]) : 115200;
+  main_window.serial.dev_p = (argc > 1) ? argv[1] : DEFAULT_SERIAL_PORT;
+  main_window.serial.baud = (argc > 2) ? atoi(argv[2]) : DEFUALT_SERIAL_BAUDERATE;
 
   if(main_create(&main_window) == MM_OK)
   {

@@ -23,6 +23,9 @@ typedef enum
 
 // ----------------------------------------------------------------------------
 
+#  define DEFAULT_SERIAL_PORT           "/dev/ttyACM0"
+#  define DEFUALT_SERIAL_BAUDERATE      115200
+
 // channels definitions
 #  define MAX_CHANNELS                  7
 #  define MAX_DATA_BUFFERING            512
@@ -45,17 +48,18 @@ typedef enum
 
 #  define MAIN_WINDOW_ERROR_DELAY       2
 
-// channels areas coords
-#  define CHANNEL_CAPTION_XOFFSET   4
-#  define CHANNEL_CAPTION_YOFFSET   4
+// channels areas coords #TODO not here (?)
+#  define CHANNEL_CAPTION_XOFFSET       4
+#  define CHANNEL_CAPTION_YOFFSET       4
 
-#  define CHANNEL_VALUE_XOFFSET     4
-#  define CHANNEL_VALUE_YOFFSET     24
+#  define CHANNEL_VALUE_XOFFSET         4
+#  define CHANNEL_VALUE_YOFFSET         24
 
-#  define CHANNEL_AREA_XOFFSET      8
-#  define CHANNEL_AREA_YOFFSET      8
+#  define CHANNEL_AREA_XOFFSET          8
+#  define CHANNEL_AREA_YOFFSET          8
 
-#  define CHANNELS_IN_COLUMN        4
+#  define CHANNELS_IN_COLUMN            4
+#  define CHANNELS_COLUMNS              2
 
 
 #endif

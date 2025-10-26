@@ -48,8 +48,6 @@ typedef struct
 
     channel_t channels_data[MAX_CHANNELS];
 
-    int err;
-
 } main_window_data_t;
 
 // ----------------------------------------------------------------------------

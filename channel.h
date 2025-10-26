@@ -45,6 +45,7 @@ typedef struct channel_t
     SDL_Color colour_data;
     SDL_Color colour_frame;
     SDL_Color colour_background;
+    SDL_Color colour_zeroline;
 
 } channel_t;
 

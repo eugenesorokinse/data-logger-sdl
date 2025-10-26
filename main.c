@@ -30,8 +30,8 @@ int main(int argc, char **argv)
   if(main_create(&main_window) == MM_OK)
   {
     main_loop(&main_window);
-    main_cleanup(&main_window);
   }
+  main_cleanup(&main_window);
 
   return 0;
 }

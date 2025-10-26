@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------
 
 _Atomic (size_t) stop_flag;
+_Atomic (size_t) log_flag;
 
 // ----------------------------------------------------------------------------
 
@@ -59,8 +60,7 @@ static void draw_text(main_window_data_t *win_p, int x, int y, const char *txt,
     return;
 
   SDL_Texture *t = SDL_CreateTextureFromSurface(win_p->render_p, s);
-  SDL_Rect r =
-  { x, y, s->w, s->h };
+  SDL_Rect r = { x, y, s->w, s->h };
   SDL_FreeSurface(s);
   SDL_RenderCopy(win_p->render_p, t, NULL, &r);
   SDL_DestroyTexture(t);
@@ -99,8 +99,7 @@ void main_updatescreen(main_window_data_t *win_p)
         win_p->channels_data[i].y + 4, win_p->channels_data[i].caption,
         win_p->channels_data[i].colour_data);
 
-    char buf[16] =
-    { 0 };
+    char buf[16] = { 0 };
     sprintf(buf, "%0.02f", data_momentum[i]);
 
     draw_text(win_p, win_p->channels_data[i].x + 4,

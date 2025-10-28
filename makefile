@@ -6,6 +6,7 @@ C_FILES     ?= main.c \
 	serial.c		\
 	data.c			\
 	channel.c		\
+	log.c		\
 	
 
 CC          ?= gcc

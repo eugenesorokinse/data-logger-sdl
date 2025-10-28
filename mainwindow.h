@@ -28,6 +28,7 @@
 
 #  include "serial.h"
 #  include "channel.h"
+#  include "log.h"
 
 // ----------------------------------------------------------------------------
 
@@ -47,6 +48,8 @@ typedef struct
     SDL_Thread *thread_serial_p;
 
     channel_t channels_data[MAX_CHANNELS];
+
+    log_t log;
 
 } main_window_data_t;
 

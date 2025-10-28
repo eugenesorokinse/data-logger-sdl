@@ -16,6 +16,8 @@
 // ----------------------------------------------------------------------------
 
 _Atomic (size_t) stop_flag;
+
+//#TODO Log flag may be not atomical
 _Atomic (size_t) log_flag;
 
 // ----------------------------------------------------------------------------
@@ -166,10 +168,10 @@ main_updatescreen(main_window_data_t *win_p)
         win_p->channels_data[i].y + CHANNEL_VALUE_YOFFSET, buf,
         win_p->channels_data[i].colour_data);
   }
+
+  SDL_RenderPresent(win_p->render_p);
 }
 
-// ----------------------------------------------------------------------------
-// ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
 // #TODO compilation warning will be mitigated, pointer will be used i framtiden
 
@@ -188,9 +190,27 @@ main_events(main_window_data_t *win_p)
     {
       SDL_Keycode key = e.key.keysym.sym;
 
+      // Quit
       if (key == SDLK_q || key == SDLK_ESCAPE)
       {
         atomic_store(&stop_flag, TRUE);
+      }
+
+      // Logging toggle
+      if (key == SDLK_s)
+      {
+        size_t log_state = atomic_load(&log_flag);
+        if(FALSE == log_state)
+        {
+          log_init(&win_p->log);
+          log_state = TRUE;
+        }
+        else
+        {
+          log_state = FALSE;
+        }
+        atomic_store(&log_flag, log_state);
+        fflush(stdout);
       }
     }
   }
@@ -212,24 +232,19 @@ main_loop(main_window_data_t *win_p)
     {
       SDL_LockMutex(win_p->serial.lock_p);
 
-//#define DO_TEST_INCOMING_DATA
-#ifdef DO_TEST_INCOMING_DATA
-        fprintf(stdout, "%f, %f, %f, %f, %f, %f, %f\r\n",
-            win_p->serial.data[0], win_p->serial.data[1],
-            win_p->serial.data[2], win_p->serial.data[3],
-            win_p->serial.data[4], win_p->serial.data[5],
-            win_p->serial.data[6]);
-        fflush(stdout);
-#endif
-
       // Do it faster or another way
-      // #TODO shift to doublebuffering mmmm.... but we have plenty of time
+      // #TODO shift to doublebuffering mmmm.... but we have quite plenty of time
       for (int i = 0; i < MAX_CHANNELS; i++)
       {
         channel_update(&win_p->channels_data[i], win_p->serial.data[i]);
         data_momentum[i] = win_p->serial.data[i];
       }
       SDL_UnlockMutex(win_p->serial.lock_p);
+
+      if(TRUE == atomic_load(&log_flag))
+      {
+        log_mu(&win_p->log, data_momentum, MAX_CHANNELS);
+      }
     }
 
 #ifdef CALIBRATION
@@ -266,8 +281,6 @@ main_loop(main_window_data_t *win_p)
 
     // update data from buffer
     main_updatescreen(win_p);
-
-    SDL_RenderPresent(win_p->render_p);
     usleep(10);
   }
 }
@@ -335,7 +348,7 @@ main_create(main_window_data_t *win_p)
     // ------------------------------------------------------------------------
 
     win_p->window_p = SDL_CreateWindow(win_p->caption,
-    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, win_p->win_w, win_p->win_h,
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, win_p->win_w, win_p->win_h,
         SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
 
     if (!win_p->window_p)

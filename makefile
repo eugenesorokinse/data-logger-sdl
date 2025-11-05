@@ -1,4 +1,4 @@
-TARGET      ?= abox-monitor-mu
+TARGET      ?= data-logger-sdl
 BUILD_DIR   ?= build
 
 C_FILES     ?= main.c \

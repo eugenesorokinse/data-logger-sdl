@@ -4,12 +4,6 @@
   Writen for Linux, but may be compiled under Win (theoretically).
   Uses SDL2, SDL2-ttf
 
-  Sure, there are many ways to define data structures and I see that some 
-things I would do now in a bit another way, but may be through several commits
-I will reach it and  my inner perfectionist will find a balance in a fight 
-with external and internal "entropy".
-
-Best regards, ES
 
 +-----------------------------------------------------------------------------+
 >>>EOF<<<

@@ -341,8 +341,14 @@ main_create(main_window_data_t *win_p)
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14);
     if (!win_p->font_p)
     {
-      fprintf(stderr, "Font load error\n");
-      break;
+      // Try another path
+      win_p->font_p = TTF_OpenFont(
+        "/usr/share/fonts/truetype/DejaVuSans.ttf", 14);
+      if (!win_p->font_p)
+      {
+        fprintf(stderr, "Font load error\n");
+        break;
+      }
     }
 
     // ------------------------------------------------------------------------

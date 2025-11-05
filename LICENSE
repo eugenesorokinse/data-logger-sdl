@@ -1,20 +1,21 @@
-Different components of OpenEmbedded are under different licenses (a mix
-of MIT and GPLv2). See LICENSE.GPL-2.0-only and LICENSE.MIT for further 
-details of the individual licenses.
+MIT License
 
-All metadata is MIT licensed unless otherwise stated. Source code
-included in tree for individual recipes (e.g. patches) are under 
-the LICENSE stated in the associated recipe (.bb file) unless 
-otherwise stated.
+Copyright (c) 2025 Eugen Sorokin
 
-License information for any other files is either explicitly stated 
-or defaults to GPL version 2 only.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-Individual files contain the following style tags instead of the full license 
-text to identify their license:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-    SPDX-License-Identifier: GPL-2.0-only
-    SPDX-License-Identifier: MIT
-
-This enables machine processing of license information based on the SPDX
-License Identifiers that are here available: http://spdx.org/licenses/
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
